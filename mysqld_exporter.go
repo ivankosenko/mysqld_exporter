@@ -490,6 +490,11 @@ func main() {
 
 func enabledScrapers(scraperFlags map[collector.Scraper]*bool) (all, hr, mr, lr []collector.Scraper) {
 	for scraper, enabled := range scraperFlags {
+		scraper_name := scraper.Name()
+		if scraper_name == "heartbeat" || scraper_name == "engine_tokudb_status" {
+			*enabled = false
+		}
+
 		if *collectAll || *enabled {
 			if _, ok := scrapers[scraper]; ok {
 				all = append(all, scraper)
